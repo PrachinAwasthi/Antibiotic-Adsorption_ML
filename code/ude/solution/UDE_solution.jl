@@ -116,10 +116,14 @@ right_margin = 20px
 top_margin = 20px
 bottom_margin = 20px
 
-plot_true_UDE_approximation=plot(t, true_sol[1, :],  seriestype=:line, linestyle=:dash, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
-plot!(ts, transpose(nn_ude_pred_sol), seriestype=:line, lw=3, label="UDE predicted data", color=:red)
-savefig("true data_predicted UDE.png")
-savefig("true data_predicted UDE.svg")
+#plot_true_UDE_approximation=plot(t, true_sol[1, :],  seriestype=:line, linestyle=:dash, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot!(ts, transpose(nn_ude_pred_sol), seriestype=:line, lw=3, label="UDE predicted data", color=:red)
+#savefig("true data_predicted UDE.png")
+#savefig("true data_predicted UDE.svg")
+plot_true_UDE_approximation=plot(t, true_sol[1, :], seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+plot!(ts, transpose(nn_ude_pred_sol), seriestype=:line, lw=3, label="Predicted data", color=:black)
+savefig("2_true data_predicted UDE.png")
+savefig("2_true data_predicted UDE.svg")
 # Compute the true interactions 
 true_missing_terms=p_initial[2].* (nn_ude_pred_sol[1, :])'
 Ȳ=true_missing_terms
@@ -127,14 +131,21 @@ Ȳ=true_missing_terms
 nn_pred_missing_terms = nn(nn_ude_pred_sol, p_final, st)[1]
 Ŷ=nn_pred_missing_terms
 # Plot the true missing terms and the UDE approximations
-plot(t, true_missing_terms',seriestype=:scatter, marker=:circle, markersize=7.0, color=:magenta, alpha=0.8,  label="Actual missing term", xlabel="Time (min)", ylabel="Desorption Rate (mg/g min)", labelfontsize=14, labelcolor=:black, title="Missing Desorption Term",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
-plot_reconstruction = plot!(t, nn_pred_missing_terms', seriestype=:line, lw=5, color=:cyan, label="UDE Predicted missing term")
-savefig("true missing term_UDE prediction.png")
-savefig("true missing term_UDE prediction.svg")
+#plot(t, true_missing_terms',seriestype=:scatter, marker=:circle, markersize=7.0, color=:magenta, alpha=0.8,  label="Actual missing term", xlabel="Time (min)", ylabel="Desorption Rate (mg/g min)", labelfontsize=14, labelcolor=:black, title="Missing Desorption Term",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot_reconstruction = plot!(t, nn_pred_missing_terms', seriestype=:line, lw=5, color=:cyan, label="UDE Predicted missing term")
+#savefig("true missing term_UDE prediction.png")
+#savefig("true missing term_UDE prediction.svg")
+plot(t, true_missing_terms',seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.8, color=:red, label="Actual term",xlabel="Time (min)", ylabel="Desorption Rate (mg/g min)", labelfontsize=14, labelcolor=:black, title="UDE Missing Term",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+plot_reconstruction = plot!(t, nn_pred_missing_terms', seriestype=:line, lw=3, color=:seagreen, label="UDE Approximation")
+savefig("2_true missing term_UDE prediction.png")
+
 #plot the error
-plot_error=plot(t, norm.(eachcol(Ȳ - Ŷ)), yaxis = :log, title="Error Plot",  xlabel = "Time (min)", ylabel = "Error", labelfontsize=12, labelcolor=:black,  label = nothing, color = :seagreen, lw=3,  legendfontsize=14)
-savefig("error.png")
-savefig("error.svg")
+#plot_error=plot(t, norm.(eachcol(Ȳ - Ŷ)), yaxis = :log, title="Error Plot",  xlabel = "Time (min)", ylabel = "Error", labelfontsize=12, labelcolor=:black,  label = nothing, color = :seagreen, lw=3,  legendfontsize=14)
+#savefig("error.png")
+#savefig("error.svg")
+plot_error=plot(t, norm.(eachcol(Ȳ - Ŷ)), yaxis = :log, title="Error",  xlabel = "Time (min)", ylabel = "Error", labelfontsize=12, labelcolor=:black,  label = nothing, color = :orange, lw=3,  legendfontsize=14)
+savefig("2_error.png")
+
 #all in one
 using Plots.PlotMeasures
 plot_size = (1200, 800)
@@ -144,6 +155,6 @@ top_margin = 15px
 bottom_margin = 15px
 
 plot_overall = plot(size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, plot_true_UDE_approximation, plot_reconstruction, plot_error)
-savefig("true_UDE_missing_terms_error.png")
-savefig("true_UDE_missing_terms_error.svg")
-savefig("true_UDE_missing_terms_error.pdf")
+savefig("2_true_UDE_missing_terms_error.png")
+#savefig("true_UDE_missing_terms_error.svg")
+#savefig("true_UDE_missing_terms_error.pdf")
