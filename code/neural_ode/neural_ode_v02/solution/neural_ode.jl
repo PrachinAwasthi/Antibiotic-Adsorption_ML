@@ -113,6 +113,9 @@ right_margin = 20px
 top_margin = 20px
 bottom_margin = 20px
 
-plot(t, true_sol[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
-plot!(tsteps, nnode_pred_sol[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
-savefig("true data_neural ODE predicted data.png")
+#plot(t, true_sol[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot!(tsteps, nnode_pred_sol[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
+#savefig("true data_neural ODE predicted data.png")
+plot(t, true_sol[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+plot!(tsteps, nnode_pred_sol[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
+savefig("true data_neural ODE predicted data_2.png")
