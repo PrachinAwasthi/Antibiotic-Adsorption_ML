@@ -114,19 +114,21 @@ nnode_pred_sol_noisy= nnode_predict(opt_sol3.u)
 ###PLot  the results
 using Plots.PlotMeasures
 plot_size = (1200, 600)
-left_margin = 20px
-right_margin = 20px
-top_margin = 20px
-bottom_margin = 20px
+left_margin = 25px
+right_margin = 15px
+top_margin = 30px
+bottom_margin = 25px
 #true_predicted_noisy_predicted
 
 #plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
 #savefig("true low  noise solution_neural ODE predicted low noise solution.png")
-plot(t, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
-plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
-savefig("true low  noise solution_neural ODE predicted low noise solution_2.png")
-
+#plot(t, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
+#savefig("true low  noise solution_neural ODE predicted low noise solution_2.png")
+plot(t, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle, color=:blue, alpha=0.5, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelcolor=:darkblack, title="Langmuir Adsorption", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
+plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line,color=:black, lw=3, label="Predicted data")
+savefig("true low  noise solution_neural ODE predicted low noise solution_3.png")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`High   noise  solution-  5e-2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##load the packages
 using DifferentialEquations, Plots
@@ -243,17 +245,20 @@ nnode_pred_sol_noisy= nnode_predict(opt_sol3.u)
 ###PLot  the results
 using Plots.PlotMeasures
 plot_size = (1200, 600)
-left_margin = 20px
-right_margin = 20px
-top_margin = 20px
-bottom_margin = 20px
+left_margin = 25px
+right_margin = 15px
+top_margin = 30px
+bottom_margin = 25px
 
 #plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
 #savefig("true noisy solution_neural ODE predicted high noise solution.png")
-plot(t, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
-plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
-savefig("true noisy solution_neural ODE predicted high noise solution_2.png")
+#plot(t, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
+#savefig("true noisy solution_neural ODE predicted high noise solution_2.png")
+plot(t, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle, color=:blue, alpha=0.5,  label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelcolor=:darkblack, title="Langmuir Adsorption",size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
+plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, color=:black ,lw=3, label="Predicted data")
+savefig("true noisy solution_neural ODE predicted high noise solution_3.png")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`Very High   noise  solution-  5e-1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##load the packages
@@ -371,14 +376,17 @@ nnode_pred_sol_noisy= nnode_predict(opt_sol3.u)
 ###PLot  the results
 using Plots.PlotMeasures
 plot_size = (1200, 600)
-left_margin = 20px
-right_margin = 20px
-top_margin = 20px
-bottom_margin = 20px
+left_margin = 25px
+right_margin = 15px
+top_margin = 30px
+bottom_margin = 25px
 
 #plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
 #savefig("true noisy solution_neural ODE predicted very high noise solution.png")
-plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
+#plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
+#savefig("true noisy solution_neural ODE predicted very high noise solution_2.png")
+plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelcolor=:darkblack, title="Langmuir Adsorption",size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=3, label="Predicted data", color=:black)
-savefig("true noisy solution_neural ODE predicted very high noise solution_2.png")
+savefig("true noisy solution_neural ODE predicted very high noise solution_3.png")
