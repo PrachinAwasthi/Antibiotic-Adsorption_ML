@@ -1,4 +1,4 @@
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case2- 70%Training data & 30% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case6- 5%Training data & 95% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ###############################################Training####################################################
 ##load the packages
@@ -18,11 +18,10 @@ function ODE(du,u,p,t)
 end
 
 #define initial values
-
 u0=[0.0]
 p0=[0.01, 0.001, 5.0, 100.0]
-tspan=(0.0, 245.0)
-datasize=35
+tspan=(0.0, 17.0)
+datasize=2
 tsteps=range(tspan[1], tspan[2], length=datasize)
 
 ## call ODEProblem function 
@@ -35,7 +34,7 @@ sol = solve(prob, Tsit5(), saveat=tsteps)
 true_sol=Array(sol)
 t=sol.t
 S=Array(sol)
-#add high noise interms of mean
+#add lhigh noise interms of mean
 x̄= mean(true_sol)
 noise_magnitude = 5e-2
 xₙ= true_sol.+(noise_magnitude*x̄).*randn(rng, eltype(true_sol), size(true_sol))
@@ -120,7 +119,7 @@ nnode_pred_sol_noisy= nnode_predict(opt_sol3.u)
 
 #plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
-#savefig("high noise data_neural ODE predicted data_case2.png")
+#savefig("low noise data_neural ODE predicted data_case5.png")
 
 ###############################################Testing####################################################
 ##load the packages
@@ -135,7 +134,6 @@ using LinearAlgebra, Statistics, StableRNGs
 p=[α, β, γ, δ]
 #define equation in terms of function
 
-
 function ODE(du,u,p,t)
    du[1]= α*γ*(δ-u[1])-β*u[1]
 end
@@ -143,8 +141,8 @@ end
 #define initial values
 u0_testing=[true_sol_noisy[end]]
 p_initial=[0.01, 0.001, 5.0, 100.0]
-testing_tspan = (245, 350.0)
-testing_datasize = 15
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 
 ## call ODEProblem function 
@@ -174,7 +172,7 @@ S_testing_noisy=Array(xₙ_testing)
 #plot(tsteps, true_sol_noisy[1, :], tickfontsize=15, seriestype=:scatter, marker=:circle, markersize=7.0, lw=3, alpha=0.5, color=:red, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps, true_sol_testing_noisy[1, :] , seriestype=:scatter, marker=:diamond, markersize=7.0, lw=3, color=:red, label="True forecast data")
 
-#savefig("high noise_trained_tested_case2.png")
+#savefig("low noise_trained_tested_case5.png")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~Neural ODE solution_Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #load the packages
@@ -184,9 +182,8 @@ using Lux, Flux, DiffEqFlux, Random
 ##Define random no and seed for reproducibility
 rng = Random.default_rng()
 Random.seed!(rng,0)
-
-testing_tspan = (245, 350.0)
-testing_datasize = 15
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 u0= nnode_pred_sol_noisy[:, end]
 
@@ -262,7 +259,7 @@ nnode_pred_sol_testing_noisy= nnode_predict(opt_sol3_testing.u)
 
 #plot(tsteps, nnode_pred_sol_noisy[1, :], tickfontsize=12, seriestype=:line,  lw=3, label="Neural ODE predicted data", alpha=0.5, color=:blue, xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps, nnode_pred_sol_testing_noisy[1, :],seriestype=:line,  linestyle=:dash,  lw=3,  color=:blue, label="Neural ODE forecast predicted data")
-#savefig("high noise_Neural ODE_trained_tested_case2.png")
+#savefig("low noise Neural ODE_trained_tested_case5.png")
 
 ##########################all in one##############
 
@@ -271,7 +268,7 @@ nnode_pred_sol_testing_noisy= nnode_predict(opt_sol3_testing.u)
 #plot!(tsteps, nnode_pred_sol_noisy[1, :], tickfontsize=12, seriestype=:line,  lw=3, label="Neural ODE predicted data", alpha=0.5, color=:blue, xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps, true_sol_testing_noisy[1, :] , seriestype=:scatter, marker=:diamond, markersize=7.0, lw=3, color=:red, label="True forecast data")
 #plot!(testing_tsteps, nnode_pred_sol_testing_noisy[1, :],seriestype=:line,  linestyle=:dash,  lw=3,  color=:blue, label="Neural ODE forecast predicted data")
-#savefig("high noise data_neural ODE_trained_tested_case2.png")
+#savefig("low noise data_neural ODE_trained_tested_case5.png")
 
 using Plots.PlotMeasures
 plot_size = (1200, 600)
@@ -280,8 +277,9 @@ right_margin = 15px
 top_margin = 30px
 bottom_margin = 25px
 
-plot(tsteps, true_sol_noisy[1, :], seriestype=:scatter, marker=:circle, alpha=0.5, color=:blue,label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelcolor=:darkblack, title="Langmuir Adsorption", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
+
+plot(tsteps, true_sol_noisy[1, :],seriestype=:scatter, marker=:circle, alpha=0.5, color=:blue,label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelcolor=:darkblack, title="Langmuir Adsorption", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(testing_tsteps, true_sol_testing_noisy[1, :] , seriestype=:scatter, marker=:circle,markersize=10.0, alpha=0.5, color=:red, label="Testing data")
 plot!(tsteps, nnode_pred_sol_noisy[1, :], seriestype=:line,  lw=3, label="Predicted data", color=:blue)
 plot!(testing_tsteps, nnode_pred_sol_testing_noisy[1, :],seriestype=:line, lw=3, label="Forecasted data", color=:red)
-savefig("2_high noise data_neural ODE_trained_tested_case2.png")
+savefig("3_high noise data_neural ODE_trained_tested_case6.png")
