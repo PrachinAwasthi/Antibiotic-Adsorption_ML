@@ -1,4 +1,4 @@
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case2- 70%Training data & 30% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case6- 5%Training data & 95% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ###############################################Training####################################################
 ##load the packages
@@ -21,8 +21,8 @@ end
 u0=[0.0]
 p_initial=[0.01, 0.001, 5.0, 100.0]
 
-tspan=(0.0, 245.0)
-datasize=35
+tspan=(0.0, 17.0)
+datasize=2
 tsteps=range(tspan[1], tspan[2], length=datasize)
 
 ## call ODEProblem function 
@@ -70,7 +70,7 @@ end
 #define NN in ODEProblem
 nn_ude!(du, u, p,t)=nn_ude(du, u, p, t, p_initial)
 
-tspan=(0.0, 245.0)
+tspan=(0.0, 17.0)
 prob_nn=ODEProblem(nn_ude!, S_noisy[:, 1], tspan, p)
 ##train the NN
 #define predict function
@@ -128,8 +128,8 @@ nn_ude_pred_sol_noisy=predict(p_trained, S_noisy[:,1], t)
 
 #plot_true_UDE_approximation=plot(t, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle, markersize=7.0, lw=5, alpha=0.5, color=:red, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(t, transpose(nn_ude_pred_sol_noisy), seriestype=:line, lw=5, label="UDE predicted data", alpha=0.5, color=:blue)
-#savefig("high noise data traied_case2.png")
-#savefig("high noise data traied_case2.svg")
+#savefig("low noise data traied_case5.png")
+#savefig("low noise data traied_case5.svg")
 
 ###############################################Testing####################################################
 ##testing for true solution
@@ -147,8 +147,8 @@ end
 #define initial values
 u0_testing=[true_sol_noisy[end]]
 p_initial=[0.01, 0.001, 5.0, 100.0]
-testing_tspan = (245, 350.0)
-testing_datasize = 15
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 
 ## call ODEProblem function 
@@ -169,19 +169,19 @@ xₙ_testing= true_sol_testing.+(noise_magnitude*x̄).*randn(rng, eltype(true_so
 true_sol_testing_noisy=Array(xₙ_testing)
 S_testing_noisy=Array(xₙ_testing)
 
-#combined_true = vcat(S_noisy[1, :], S_testing_noisy[1, 2:end])
+combined_true = vcat(S_noisy[1, :], S_testing_noisy[1, 2:end])
 
-#combined_tsteps = vcat(t, testing_tsteps[2:end])
+combined_tsteps = vcat(t, testing_tsteps[2:end])
 
 #plot(tsteps, true_sol_noisy[1, :], tickfontsize=15, seriestype=:scatter, marker=:circle, markersize=7.0, lw=3, alpha=0.5, color=:red, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps,  true_sol_testing_noisy[1, :] , seriestype=:scatter, marker=:diamond, markersize=7.0, lw=3, color=:red, label="True forecast data")
 
-#savefig("high noise data_trained_tested_case2.png")
+#savefig("low noise data_trained_tested_case5.png")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 ####################NNUDE prediction for testing#############################################################
 # Extend the timespan for prediction
-testing_tspan = (245, 350.0)
-testing_datasize = 15
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 
 ##Define random no and seed for reproducibility
@@ -202,7 +202,7 @@ end
 #define NN in ODEProblem
 nn_ude!(du, u, p,t)=nn_ude(du, u, p, t, p_initial)
 
-testing_tspan = (245, 350.0)
+testing_tspan = (35, 350.0)
 S_testing_noisy=Array(xₙ_testing)
 p_trained=opt_sol3.u
 prob_nn_testing=ODEProblem(nn_ude!, nn_ude_pred_sol_noisy[:, end], testing_tspan, p_trained)
@@ -259,7 +259,7 @@ combined_tsteps = vcat(t, testing_tsteps[1:end])
 
 #plot(tsteps, nn_ude_pred_sol_noisy', tickfontsize=12, seriestype=:line,  lw=3, label="UDE predicted data", alpha=0.5, color=:blue, xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps, nn_ude_pred_sol_testing_noisy', seriestype=:line,  linestyle=:dash,  lw=3,  color=:blue, label="UDE forecast predicted data")
-#savefig("UDE_trained_tested_case2.png")
+#savefig("UDE_trained_tested_case5.png")
 
 ##########################all in one##############
 
@@ -267,8 +267,9 @@ combined_tsteps = vcat(t, testing_tsteps[1:end])
 #plot!(tsteps, nn_ude_pred_sol_noisy', tickfontsize=12, seriestype=:line,  lw=5, label="UDE predicted data", alpha=0.5, color=:blue)
 #plot!(testing_tsteps,  true_sol_testing_noisy[1, :] , seriestype=:scatter, marker=:diamond, markersize=7.0, lw=3, color=:red, label="True forecast data")
 #plot!(testing_tsteps, nn_ude_pred_sol_testing_noisy', seriestype=:line, lw=5,  color=:blue, label="UDE forecast predicted data")
-#savefig("high noise data_UDE_trained_tested_case2.png")
+#savefig("low  noise data_UDE_trained_tested_case5.png")
 
+# Compute the true interactions 
 true_missing_terms=p_initial[2].* (combined_pred[:, :])'
 Ȳ=true_missing_terms
 # compute the neural network guess of the interactions
@@ -284,14 +285,13 @@ right_margin = 15px
 top_margin = 30px
 bottom_margin = 25px
 
-plot(combined_tsteps, true_missing_terms',seriestype=:scatter, marker=:circle, alpha=0.5, color=:red, label="Actual term",xlabel="Time (min)", ylabel="Desorption Rate (mg/g min)",  labelcolor=:black, title="UDE Missing Term", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:topright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
+plot(combined_tsteps, true_missing_terms',seriestype=:scatter, marker=:circle, alpha=0.5, color=:red, label="Actual term",xlabel="Time (min)", ylabel="Desorption Rate (mg/g min)",  labelcolor=:black, title="UDE Missing Term", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(t, nn_pred_missing_terms', seriestype=:line, lw=3, color=:seagreen, label="UDE Approximation")
 plot!(testing_tsteps, nn_forecast_missing_terms', seriestype=:line, lw=3, color=:blue, label="UDE Forecasted")
-savefig("3_high noise_true missing term_UDE prediction_case2.png")
+savefig("3_high noise_true missing term_UDE prediction_case6.png")
 
 plot(tsteps, true_sol_noisy[1, :],  seriestype=:scatter, marker=:circle, alpha=0.5, color=:blue,label="Training data",xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelcolor=:darkblack, title="Langmuir Adsorption", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(testing_tsteps,  true_sol_testing_noisy[1, :] , seriestype=:scatter, marker=:circle,markersize=10.0, alpha=0.5, color=:red, label="Testing data")
 plot!(tsteps, nn_ude_pred_sol_noisy',seriestype=:line,  lw=3, label="Predicted data", color=:blue)
 plot!(testing_tsteps, nn_ude_pred_sol_testing_noisy', seriestype=:line, lw=3, label="Forecasted data", color=:red)
-savefig("3_high  noise data_UDE_trained_tested_case2.png")
-
+savefig("3_high noise data_UDE_trained_tested_case6.png")
