@@ -1,4 +1,4 @@
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case5- 10%Training data & 90% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case6- 5%Training data & 95% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ###############################################Training####################################################
 ##load the packages
@@ -20,8 +20,8 @@ end
 #define initial values
 u0=[0.0]
 p_initial=[0.01, 0.001, 5.0, 100.0]
-tspan=(0.0, 35.0)
-datasize=5
+tspan=(0.0, 17.0)
+datasize=2
 tsteps=range(tspan[1], tspan[2], length=datasize)
 
 ## call ODEProblem function 
@@ -62,7 +62,7 @@ end
 #define NN in ODEProblem
 nn_ude!(du, u, p,t)=nn_ude(du, u, p, t, p_initial)
 
-tspan=(0.0, 35.0)
+tspan=(0.0, 17.0)
 prob_nn=ODEProblem(nn_ude!, S[:, 1], tspan, p)
 ##train the NN
 #define predict function
@@ -138,8 +138,8 @@ end
 #define initial values
 u0_testing=[true_sol[end]]
 p_initial=[0.01, 0.001, 5.0, 100.0]
-testing_tspan = (35, 350.0)
-testing_datasize = 45
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 
 ## call ODEProblem function 
@@ -165,8 +165,8 @@ S_testing=Array(sol_testing)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 ####################NNUDE prediction for testing#############################################################
 # Extend the timespan for prediction
-testing_tspan = (35, 350.0)
-testing_datasize = 45
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 
 ##Define random no and seed for reproducibility
@@ -187,7 +187,7 @@ end
 #define NN in ODEProblem
 nn_ude!(du, u, p,t)=nn_ude(du, u, p, t, p_initial)
 
-testing_tspan = (35, 350.0)
+testing_tspan = (17, 350.0)
 S_testing=Array(sol_testing)
 p_trained=opt_sol2.u
 prob_nn_testing=ODEProblem(nn_ude!, nn_ude_pred_sol[:, end], testing_tspan, p_trained)
@@ -232,7 +232,7 @@ opt_sol2_testing= Optimization.solve(opt_prob2_testing, OptimizationOptimisers.A
 #opt_sol3_testing=Optimization.solve(opt_prob3_testing, LBFGS(), callback=callback, maxiters=2000)
 
 #analyse the results
-p_tested=opt_sol3_testing.u
+p_tested=opt_sol2_testing.u
 
 nn_ude_pred_sol_testing=extended_predict(p_tested, nn_ude_pred_sol[:, end], testing_tsteps)
 
@@ -273,10 +273,10 @@ bottom_margin = 25px
 plot(combined_tsteps, true_missing_terms',seriestype=:scatter, marker=:circle, alpha=0.5, color=:red, label="Actual term",xlabel="Time (min)", ylabel="Desorption Rate (mg/g min)",  labelcolor=:black, title="UDE Missing Term", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(t, nn_pred_missing_terms', seriestype=:line, lw=3, color=:seagreen, label="UDE Approximation")
 plot!(testing_tsteps, nn_forecast_missing_terms', seriestype=:line, lw=3, color=:blue, label="UDE Forecasted")
-savefig("3_true data_true missing term_UDE prediction_case5.png")
+savefig("3_true data_true missing term_UDE prediction_case6.png")
 
 plot(tsteps, true_sol[1, :],  seriestype=:scatter, marker=:circle, alpha=0.5, color=:blue,label="Training data",xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelcolor=:darkblack, title="Langmuir Adsorption", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(testing_tsteps,  true_sol_testing[1, :] , seriestype=:scatter, marker=:circle,markersize=10.0, alpha=0.5, color=:red, label="Testing data")
 plot!(tsteps, nn_ude_pred_sol',seriestype=:line,  lw=3, label="Predicted data", color=:blue)
 plot!(testing_tsteps, nn_ude_pred_sol_testing', seriestype=:line, lw=3, label="Forecasted data", color=:red)
-savefig("3_true data_UDE_trained_tested_case5.png")
+savefig("3_true data_UDE_trained_tested_case6.png")
