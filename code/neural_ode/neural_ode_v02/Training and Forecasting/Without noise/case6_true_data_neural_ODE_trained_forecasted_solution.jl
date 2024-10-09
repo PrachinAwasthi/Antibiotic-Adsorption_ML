@@ -1,4 +1,4 @@
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case4- 30%Training data & 70% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~case6- 5%Training data & 95% Testing data~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ###############################################Training####################################################
 ##load the packages
@@ -20,8 +20,8 @@ end
 #define initial values
 u0=[0.0]
 p0=[0.01, 0.001, 5.0, 100.0]
-tspan=(0.0, 105.0)
-datasize=15
+tspan=(0.0, 17.0)
+datasize=2
 tsteps=range(tspan[1], tspan[2], length=datasize)
 
 ## call ODEProblem function 
@@ -120,7 +120,7 @@ nnode_pred_sol= nnode_predict(opt_sol3.u)
 
 #plot(t, true_sol[1, :],  seriestype=:scatter, marker=:circle,markersize=7.0, lw=5, color=:blue, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption", titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(tsteps, nnode_pred_sol[1, :], seriestype=:line, lw=5, label="Neural ODE predicted data", color=:red)
-#savefig("true data_neural ODE predicted data_case4.png")
+#savefig("true data_neural ODE predicted data_case5.png")
 
 ###############################################Testing####################################################
 ##load the packages
@@ -142,8 +142,8 @@ end
 #define initial values
 u0_testing=[true_sol[end]]
 p_initial=[0.01, 0.001, 5.0, 100.0]
-testing_tspan = (105, 350.0)
-testing_datasize = 35
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
 
 ## call ODEProblem function 
@@ -164,7 +164,7 @@ S=Array(sol)
 #plot(tsteps, true_sol[1, :], tickfontsize=15, seriestype=:scatter, marker=:circle, markersize=7.0, lw=3, alpha=0.5, color=:red, label="True data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps,  true_sol_testing[1, :] , seriestype=:scatter, marker=:diamond, markersize=7.0, lw=3, color=:red, label="True forecast data")
 
-#savefig("true data_trained_tested_case4.png")
+#savefig("true data_trained_tested_case5.png")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~Neural ODE solution_Testing~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #load the packages
@@ -175,10 +175,10 @@ using Lux, Flux, DiffEqFlux, Random
 rng = Random.default_rng()
 Random.seed!(rng,0)
 
-testing_tspan = (105, 350.0)
-testing_datasize = 35
+testing_tspan = (17, 350.0)
+testing_datasize = 48
 testing_tsteps = range(testing_tspan[1], testing_tspan[2], length=testing_datasize)
-u0= S_testing[:, 1]
+u0= nnode_pred_sol[:, end]
 
 ## define neural Network
 nn= Lux.Chain(Lux.Dense(1,16,sigmoid), Lux.Dense(16,16,sigmoid), Lux.Dense(16,1))
@@ -189,7 +189,7 @@ p,st=Lux.setup(rng,nn)
 nnode_sol=NeuralODE(nn, testing_tspan, Tsit5(), saveat=testing_tsteps)
 ## define a prediction function which uses neuralODE() with initial conditions and parameters
 
-u0= S_testing[:, 1]
+u0= nnode_pred_sol[:, end]
 p_trained=opt_sol3.u
 p=p_trained
 function nnode_extended_predict(p)
@@ -244,7 +244,7 @@ nnode_pred_sol_testing= nnode_predict(opt_sol3_testing.u)
 
 ###PLot  the results
 #using Plots.PlotMeasures
-#plot_size = (1200, 600)
+#lot_size = (1200, 600)
 #left_margin = 20px
 #right_margin = 20px
 #top_margin = 20px
@@ -252,7 +252,7 @@ nnode_pred_sol_testing= nnode_predict(opt_sol3_testing.u)
 
 #plot(tsteps, nnode_pred_sol[1, :], tickfontsize=12, seriestype=:line,  lw=3, label="Neural ODE predicted data", alpha=0.5, color=:blue, xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps, nnode_pred_sol_testing[1, :],seriestype=:line,  linestyle=:dash,  lw=3,  color=:blue, label="Neural ODE forecast predicted data")
-#savefig("Neural ODE_trained_tested_case4.png")
+#savefig("Neural ODE_trained_tested_case5.png")
 
 ##########################all in one##############
 
@@ -260,10 +260,18 @@ nnode_pred_sol_testing= nnode_predict(opt_sol3_testing.u)
 #plot!(tsteps, nnode_pred_sol[1, :], tickfontsize=12, seriestype=:line,  lw=3, label="Neural ODE predicted data", alpha=0.5 , color=:blue, xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)", labelfontsize=14, labelcolor=:darkblack, title="Langmuir Adsorption",titlefontsize=16, size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, legendfontsize=14)
 #plot!(testing_tsteps,  true_sol_testing[1, :] , seriestype=:scatter, marker=:diamond, markersize=7.0, lw=3, color=:red, label="True forecast data")
 #plot!(testing_tsteps, nnode_pred_sol_testing[1, :],seriestype=:line,  linestyle=:dash,  lw=3,  color=:blue, label="Neural ODE forecast predicted data")
-#savefig("true data_neural ODE_trained_tested_case4.png")
+#savefig("true data_neural ODE_trained_tested_case5.png")
+
+using Plots.PlotMeasures
+plot_size = (1200, 600)
+left_margin = 25px
+right_margin = 15px
+top_margin = 30px
+bottom_margin = 25px
+
 
 plot(tsteps, true_sol[1, :], seriestype=:scatter, marker=:circle, alpha=0.5, color=:blue, label="Training data", xlabel="Time (min)", ylabel="Adsorption Capacity (mg/g)",  labelcolor=:darkblack, title="Langmuir Adsorption", size=plot_size, left_margin=left_margin, right_margin=right_margin, bottom_margin=bottom_margin, top_margin=top_margin, legend=:bottomright, grid=false, markersize=10, xlabelfontsize=18, ylabelfontsize=18, titlefontsize=28, xtickfontsize=18, ytickfontsize=18, legendfontsize=18)
 plot!(testing_tsteps,  true_sol_testing[1, :] , seriestype=:scatter, marker=:circle,markersize=10.0, alpha=0.5, color=:red, label="Testing data")
 plot!(tsteps, nnode_pred_sol',seriestype=:line, lw=3, label="Predicted data", color=:blue)
 plot!(testing_tsteps, nnode_pred_sol_testing', seriestype=:line, lw=3, label="Forecasted data", color=:red)
-savefig("2_true data_neural ODE_trained_tested_case4.png")
+savefig("2_true data_neural ODE_trained_tested_case6.png")
