@@ -1,0 +1,12 @@
+Equation: Model ##Basis#1703763 with 1 equations
+States : x(t)
+Parameters : p₁ p₂
+Independent variable: t
+Equations
+φ₁ = p₁ + p₂*x(t)
+
+Updated Parameters: retcode: Success
+u: [-0.5148185630990911, 0.006657593586198813]
+Final objective value:     0.03175836602417714
+
+Equation with updated parameters: Num[-0.5148185630990911 + 0.006657593586198813x(t)]
